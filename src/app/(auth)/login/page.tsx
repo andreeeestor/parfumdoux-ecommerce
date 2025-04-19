@@ -10,6 +10,8 @@ import { Label } from "@/components/ui/label";
 import perfumeImg from "../../../../public/images/visualelectric-1744626735608.png"
 import Link from "next/link";
 import LogoIcon from "@/components/icons/Logo";
+import { useAuthStore } from "@/store/auth-store";
+import axios from "axios";
 
 export default function LoginPage() {
   // Aqui é só um Model dos dados do login com o tipo e etc
@@ -45,8 +47,14 @@ export default function LoginPage() {
    */
   type LoginSchema = z.infer<typeof LoginSchema>;
 
-  const onSubmit = (data: LoginSchema) => {
-    console.log(data);
+  const onSubmit = async (data: LoginSchema) => {
+    try {
+      const setUser = useAuthStore.getState().setUser
+      const response = await axios.post("/api/login", data)
+      setUser(response.data)
+    } catch(error) {
+      toast.error(`Erro ao logar, tente novamente mais tarde, ${error}`)
+    }
   };
 
   return (

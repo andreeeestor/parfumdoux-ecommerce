@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import LogoIcon from "@/components/icons/Logo";
 import axios from "axios";
+import { useAuthStore } from "@/store/auth-store";
 
 export default function SignUpPage() {
   const SignUpSchema = z
@@ -39,7 +40,9 @@ export default function SignUpPage() {
 
   const onSubmit = async (data: SignUpSchema) => {
     try {
-      await axios.post("/api/register", data);
+      const setUser = useAuthStore.getState().setUser;
+      const response = await axios.post("/api/register", data);
+      setUser(response.data);
       toast.success(`Sua conta foi criada com sucesso, ${data.name}`);
     } catch {
       toast.error(`Erro ao criar a conta. Tente novamente mais tarde`);
