@@ -6,6 +6,7 @@ import {
   Package,
   PhoneCall,
   SidebarIcon,
+  SquarePen,
   UserCircle,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
@@ -19,6 +20,18 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { useAuthStore } from "@/store/auth-store";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Toggle } from "../ui/toggle";
 
 export default function Sidebar() {
   const user = useAuthStore((state) => state.user);
@@ -93,33 +106,74 @@ export default function Sidebar() {
               </Tooltip>
             ) : (
               <>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link
-                      className="flex items-center justify-center gap-4 px-2.5 shrink-0 text-muted-foreground hover:text-white"
-                      href="/perfil"
-                    >
-                      <UserCircle className="size-6 transition-all" />
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent className="font-semibold" side="right">
-                    Perfil
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link
-                      onClick={logout}
-                      className="flex items-center justify-center gap-4 px-2.5 shrink-0 text-muted-foreground hover:text-white"
-                      href="/login"
-                    >
-                      <LogOut className="size-6 transition-all" />
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent className="font-semibold" side="right">
-                    Sair
-                  </TooltipContent>
-                </Tooltip>
+                <Dialog>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <DialogTrigger asChild>
+                        <span className="cursor-pointer flex items-center justify-center gap-4 px-2.5 shrink-0 text-muted-foreground hover:text-white">
+                          <UserCircle className="size-6 transition-all" />
+                        </span>
+                      </DialogTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent className="font-semibold" side="right">
+                      Perfil
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link
+                        onClick={logout}
+                        className="flex items-center justify-center gap-4 px-2.5 shrink-0 text-muted-foreground hover:text-white"
+                        href="/login"
+                      >
+                        <LogOut className="size-6 transition-all" />
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent className="font-semibold" side="right">
+                      Sair
+                    </TooltipContent>
+                    <DialogContent className="sm:max-w-[425px] text-white">
+                      <DialogHeader>
+                        <DialogTitle>Perfil</DialogTitle>
+                        <DialogDescription>
+                          VEJA ou EDITE o seu perfil aqui. Clique em salvar quando terminar.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="name" className="text-right">
+                            Nome
+                          </Label>
+                          <Input
+                            id="name"
+                            value={user.name}
+                            className="col-span-3"
+                            disabled
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="username" className="text-right">
+                            Email
+                          </Label>
+                          <Input
+                            id="username"
+                            value={user.email}
+                            className="col-span-3"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Toggle className="cursor-pointer border-2">
+                          <SquarePen />
+                        </Toggle>
+                        <Button type="submit" 
+                        disabled={true}
+                        >Salvar</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Tooltip>
+                </Dialog>
               </>
             )}
           </TooltipProvider>
