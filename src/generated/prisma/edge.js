@@ -180,7 +180,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",
@@ -194,7 +194,7 @@ const config = {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "mongodb+srv://12101494:BQQU2Mf9o7IY2CfO@cluster0.vunhc1i.mongodb.net/test"
+        "value": "mongodb+srv://parfumdouxuser:pvWmuZgHtBi1Y5xp@parfumdoux.fm31ibr.mongodb.net/parfumdoux?retryWrites=true&w=majority"
       }
     }
   },

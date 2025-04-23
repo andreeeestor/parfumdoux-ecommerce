@@ -7,24 +7,21 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import perfumeImg from "../../../../public/images/visualelectric-1744626735608.png"
+import perfumeImg from "../../../../public/images/visualelectric-1744626735608.png";
 import Link from "next/link";
 import LogoIcon from "@/components/icons/Logo";
 import { useAuthStore } from "@/store/auth-store";
 import axios from "axios";
+import { useRouter } from "nextjs-toploader/app";
 
 export default function LoginPage() {
-  // Aqui é só um Model dos dados do login com o tipo e etc
+  const router = useRouter();
+
   const LoginSchema = z.object({
     email: z.string().email({ message: "Email Inválido!" }),
     password: z.string().min(6, { message: "Mínimo 6 caracteres!" }),
   });
 
-  /* 
-  Aqui é para pegar a função de submit do form + register
-  (register serve para armanezar o valor do input no data)
-  e o "resolver" serve para a validação do schema 
-  */
   const {
     handleSubmit,
     register,
@@ -40,27 +37,26 @@ export default function LoginPage() {
     toast.error(`${errors.password?.message}`);
   }
 
-  /* Agora para integrar com o TypeScript
-   Aqui basicamente tá falando que sempre que usar esse tipo
-   vai tá inferindo o schema, ou seja, falando que ta 'carregando'
-   o schema.
-   */
   type LoginSchema = z.infer<typeof LoginSchema>;
 
   const onSubmit = async (data: LoginSchema) => {
     try {
-      const setUser = useAuthStore.getState().setUser
-      const response = await axios.post("/api/login", data)
-      setUser(response.data)
-    } catch(error) {
-      toast.error(`Erro ao logar, tente novamente mais tarde, ${error}`)
+      const setUser = useAuthStore.getState().setUser;
+      const response = await axios.post("/api/login", data);
+      setUser(response.data);
+      toast.success("Tudo Certo! Redirecionando...");
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
+    } catch (error) {
+      toast.error(`Erro ao logar, tente novamente mais tarde, ${error}`);
     }
   };
 
   return (
     <main className="flex min-h-screen bg-[#011627]">
       <div className="w-1/2 border border-r-slate-700 border-y-0 border-l-0 shadow-2xl rounded-r-4xl flex flex-col items-center justify-center">
-      <div className="max-w-md w-full text-white space-y-5 mb-5">
+        <div className="max-w-md w-full text-white space-y-5 mb-5">
           <div className="bg-gradient-to-tr from-orange-600 to-orange-500 p-3 rounded-2xl size-24">
             <LogoIcon />
           </div>
@@ -82,19 +78,30 @@ export default function LoginPage() {
           </div>
           <div className="">
             <Label className="mb-2 text-white">Senha:</Label>
-            <Input type="password" {...register("password")} className="bg-white"></Input>
+            <Input
+              type="password"
+              {...register("password")}
+              className="bg-white"
+            ></Input>
           </div>
           <Button type="submit" className="w-full cursor-pointer">
             Entrar
           </Button>
         </form>
         <p className="text-white font font-medium text-sm pt-6">
-          Não tem uma conta? 
-          <Link href={"/signup"} className="underline font-semibold pl-1">Cadastre-se</Link>
+          Não tem uma conta?
+          <Link href={"/signup"} className="underline font-semibold pl-1">
+            Cadastre-se
+          </Link>
         </p>
       </div>
       <div className="w-1/2 relative shadow-2xl m-6 rounded-2xl">
-        <Image src={perfumeImg} alt="perfume background" fill className="object-cover rounded-2xl" />
+        <Image
+          src={perfumeImg}
+          alt="perfume background"
+          fill
+          className="object-cover rounded-2xl"
+        />
       </div>
     </main>
   );
